@@ -23,16 +23,16 @@ public class MythicMobDeath implements Listener{
 			public void run() {
 				if (event.getKiller() instanceof Player) {
 					RaidUser user = new RaidUser(plugin, (Player) event.getKiller());
+					String internalName = event.getMob().getType().getInternalName();
 					
-					if (plugin.getConfigManager().getBossList().contains
-							(event.getMob().getType().getInternalName())) {
-						plugin.debugMessage("Boss Killed");
-						bossDeath();
-						pointsSave();
-//						plugin.get
+					if (plugin.getConfigManager().getBossList().contains(internalName)) {
+						plugin.debugMessage("Boss Killed: " + internalName);
+						updatePoints();
+						savePoints();
+						invalidateCaches();
 					} else {
-						user.updateCachePoints(event.getMob().getType().getInternalName());
-						plugin.debugMessage("Non Boss Killed");
+						plugin.debugMessage("Non Boss Killed: " + internalName);
+						user.updateCachePoints(internalName);
 					}
 				}
 			}
@@ -40,15 +40,19 @@ public class MythicMobDeath implements Listener{
 		}.runTaskAsynchronously(plugin);
 	}
 	
-	public void bossDeath() {
-		plugin.getRaiduserBossPoints().asMap().forEach((key, v) -> {
+	public void updatePoints() {
+		plugin.getRaidUserBossPoints().asMap().forEach((key, v) -> {
 			key.updateCachePoints(v);
 		});
 	}
-	public void pointsSave() {
+	public void savePoints() {
 		plugin.getRaidUserCachePoints().asMap().forEach((key, v) -> {
 			key.updatePoints();
 		});
+	}
+	public void invalidateCaches() {
+		plugin.getRaidUserBossPoints().invalidateAll();
+		plugin.getRaidUserCachePoints().invalidateAll();
 	}
 
 }

@@ -21,26 +21,24 @@ public class MythicMobBossHandler implements Listener{
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if (event.getDamager() instanceof Player && 
-						plugin.getBukkitAPIHelper().isMythicMob(event.getEntity().getUniqueId())) {
+				if ( event.getDamager() instanceof Player && 
+					plugin.isMM(event.getEntity()) ) {
 					
 					RaidUser user = new RaidUser(plugin, (Player) event.getDamager());
-					ActiveMob activeMob = plugin.getBukkitAPIHelper().getMythicMobInstance(event.getEntity());
-					double health =	plugin.getBukkitAPIHelper().getMythicMob(activeMob.getType().getInternalName()).getHealth(activeMob);
+					ActiveMob activeMob = plugin.getActiveMob(event.getEntity());
+					String internalName = plugin.getInternalName(activeMob);
+					double health =	plugin.getHealth(activeMob);
 								
-					if (plugin.getConfigManager().getBossList().contains(activeMob.getType().getInternalName())) {
+					if (plugin.getConfigManager().getBossList().contains(internalName)) {
 						
-						plugin.debugMessage("LIST CONTAINS " + activeMob.getType().getInternalName());
-						double damage = plugin.getRaiduserBossPoints().get(user) +
+						double damage = plugin.getRaidUserBossPoints().get(user) +
 								event.getFinalDamage() / health * 100;    
 												
-						plugin.getRaiduserBossPoints().put(user, plugin.format(damage));
+						plugin.getRaidUserBossPoints().put(user, plugin.format(damage));
 						plugin.debugMessage("Damage % = " + plugin.format(damage));
 					} else {
-						
-						plugin.debugMessage("LIST NOT CONTAINS " + activeMob.getType().getInternalName());
 					}
-				}//if
+				}
 			}
 		
 		}.runTaskAsynchronously(plugin);

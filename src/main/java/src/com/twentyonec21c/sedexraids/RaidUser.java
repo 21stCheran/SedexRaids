@@ -6,37 +6,26 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.twentyonec21c.sedexraids.Utils.ConfigManager;
 import com.twentyonec21c.sedexraids.Utils.SQLManager;
 
 public class RaidUser {
 	
 	private SedexRaids plugin;
 	private SQLManager sqlManager;
-    @SuppressWarnings("unused")
-	private ConfigManager configManager;
-	
 	private Player user;
 	private UUID uuid;
 		
 	public RaidUser(SedexRaids plugin, Player user) {
-		
 		this.plugin = plugin;
-		
 		this.user = Objects.requireNonNull(user, "Player could not be created!");
-		uuid = user.getUniqueId();
-				
+		uuid = user.getUniqueId();	
 		sqlManager = plugin.getSqlManager();
-        this.configManager = plugin.getConfigManager();
        	}
 	
 	@Override
     public boolean equals(Object obj) {
 
-        if (obj == null)
-            return false;
-
-        if (!(obj instanceof RaidUser))
+        if (obj == null&&(!(obj instanceof RaidUser)))
             return false;
 
         @SuppressWarnings("unused")
@@ -81,19 +70,14 @@ public class RaidUser {
 	        return sqlManager.getPlayerPoints(uuid, "weekly");
 	    }
 	  
-	  public void updateCachePoints(String internal_name) {
-				  double points;
-				  if (plugin.getConfigManager().getHashMap().containsKey(internal_name)) {
-					  points = plugin.getConfigManager().getHashMap().get(internal_name)
-							  * plugin.getConfigManager().getBaseModifier();
-				  } else {
-					  points = plugin.getConfigManager().getBaseModifier();
-				  }
-				  
-				  double newValue = points + plugin.getRaidUserCachePoints().get(RaidUser.this);
-				  plugin.debugMessage("NewValue " + newValue);
-				  
-				  plugin.getRaidUserCachePoints().put(RaidUser.this, newValue);
+	  public void updateCachePoints(String internalName) {
+				  final double baseValue = plugin.getConfigManager().getBaseModifier();
+				  final Double modifier = plugin.getConfigManager().getModifier(internalName);
+				  double cachePoints = plugin.getRaidUserCachePoints().get(this);
+				  double points = (modifier==null)?baseValue+cachePoints:modifier*baseValue+cachePoints;
+//				  if the mob has a modifier then it uses it, else it assigns the base value				  
+				  plugin.getRaidUserCachePoints().put(this, points);
+				  plugin.debugMessage(user.getDisplayName()+"'s cache set to: " + points);
 	  }
 	  public void updateCachePoints(double bossPoints) {
 		  double newValue = bossPoints + plugin.getRaidUserCachePoints().get(this);
@@ -112,13 +96,10 @@ public class RaidUser {
 
 	                plugin.getRaidUserCacheTotal().refresh(RaidUser.this);
 	                plugin.getRaidUserCacheWeekly().refresh(RaidUser.this);
-	                plugin.getRaidUserCachePoints().refresh(RaidUser.this);
-	                plugin.getRaiduserBossPoints().refresh(RaidUser.this);
 	                plugin.debugMessage("Total and Weekly caches have been refreshed");
 	         
 
 	    }
-	  
 	  public void createUser() {
 	        new BukkitRunnable() {
 

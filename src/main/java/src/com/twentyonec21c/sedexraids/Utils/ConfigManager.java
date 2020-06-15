@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class ConfigManager {
 	
 	private FileConfiguration configuration;
-	private HashMap<String, Double> internal_names;
+	private HashMap<String, Double> internalNames;
 	private List<?> bossList;
 	
 	private final String DEBUG_PATH = "debug";
@@ -22,6 +22,7 @@ public class ConfigManager {
     private final String BASEVALUE_PATH = "raidpoints.basevalue";
     private final String MODIFIERS_PATH = "raidpoints.modifiers";
     private final String BOSS_PATH = "raidpoints.bosses";
+    private final String PURECENTAGE_PATH = "raidpoints.purecentage";
 
     public ConfigManager(FileConfiguration configuration) {
         this.configuration = configuration;
@@ -32,7 +33,7 @@ public class ConfigManager {
     
     public void loadHashMap() {
     	System.out.println("21Speed: Inside Map Loader");
-    	internal_names = new HashMap<String, Double>();
+    	internalNames = new HashMap<String, Double>();
     	String[] mapping = {null,null};
     	
     	List<?> internal_name_list = configuration.getList(MODIFIERS_PATH);
@@ -41,7 +42,7 @@ public class ConfigManager {
     	for(int i = 0; internal_name_list.size() > i; i++) {
     		mapping = internal_name_list.get(i).toString().split(" ");
     		
-    		internal_names.put(mapping[0], Double.valueOf(mapping[1]));
+    		internalNames.put(mapping[0], Double.valueOf(mapping[1]));
     	}
     	
     }
@@ -50,7 +51,10 @@ public class ConfigManager {
     	bossList = configuration.getList(BOSS_PATH);
     }
     public HashMap<String, Double> getHashMap() {
-    	return internal_names;
+    	return internalNames;
+    }
+    public double getModifier(String key) {
+    	return internalNames.get(key);
     }
     public List<?> getBossList() {
     	return bossList;
@@ -79,5 +83,8 @@ public class ConfigManager {
     }
     public double getBaseModifier() {
     	return configuration.getDouble(BASEVALUE_PATH);
+    }
+    public boolean centageType() {
+    	return configuration.getBoolean(PURECENTAGE_PATH);
     }
 }
