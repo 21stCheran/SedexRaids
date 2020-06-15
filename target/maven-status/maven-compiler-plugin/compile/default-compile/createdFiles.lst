@@ -1,0 +1,14 @@
+com/twentyonec21c/sedexraids/Listeners/MythicMobBossHandler$1.class
+com/twentyonec21c/sedexraids/Utils/SQLManager.class
+com/twentyonec21c/sedexraids/Listeners/PlayerJoin.class
+com/twentyonec21c/sedexraids/Utils/SedexRaidsPermissions.class
+com/twentyonec21c/sedexraids/RaidUser$1.class
+com/twentyonec21c/sedexraids/Listeners/MythicMobDeath.class
+com/twentyonec21c/sedexraids/Utils/PlaceholderapiExpansion.class
+com/twentyonec21c/sedexraids/Utils/RaidUserCache.class
+com/twentyonec21c/sedexraids/Listeners/MythicMobBossHandler.class
+com/twentyonec21c/sedexraids/Listeners/MythicMobDeath$1.class
+com/twentyonec21c/sedexraids/Utils/ConfigManager.class
+com/twentyonec21c/sedexraids/SedexRaids.class
+com/twentyonec21c/sedexraids/commands/CommandManager.class
+com/twentyonec21c/sedexraids/RaidUser.class

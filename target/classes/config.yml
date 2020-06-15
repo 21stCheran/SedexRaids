@@ -1,0 +1,27 @@
+debug: true
+
+# Database config
+mysql:
+  hostname: localhost
+  port: 3306
+  username: root
+  password: 
+  database: 21C
+
+raidpoints:
+    #default raidpoints a mythic mob will give.
+    basevalue: 21
+    #multiplies the 'basevalue' with a value to modify the amount of raid points a sepcific mob gives.
+    modifiers:
+  #   - <mythicmob> <multiplier goes here>
+      - 21st_Cheran 21
+      - Techisgay 21
+      - poolle 12
+    bosses:
+    #Any "boss" must exist for the table to get updated Table won't update unless player(s) kill boss.
+      - 21C
+    #if set to false, allows players to get more than 100% of the boss points if the boss has healing skills.
+    #false = P.damage/Base.health * 100
+    #true = P.damage/Total.Dmg * 100
+    #if set to true, assings true percentages based on damage of all the players.
+    purecentage: false
