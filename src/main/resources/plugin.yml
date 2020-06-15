@@ -1,9 +1,0 @@
-name: SedexRaids
-version: 1.0
-main: com.twentyonec21c.sedexraids.SedexRaids
-author: 21C
-description: A plugin
-api-version: "1.15"
-
-softdepend: [PlaceholderAPI]
-depend: [MythicMobs]
